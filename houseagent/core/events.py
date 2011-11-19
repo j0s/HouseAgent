@@ -26,6 +26,7 @@ class EventHandler(object):
         
         # let the coordinator know we are here
         coordinator.eventengine = self
+        self._coordinator = coordinator
     
     @inlineCallbacks
     def _load_triggers(self):
@@ -204,6 +205,8 @@ class EventHandler(object):
                     self._coordinator.send_poweron(a.plugin_id, a.address)
                 elif a.type == "Device action" and a.control_type == "CONTROL_TYPE_THERMOSTAT":
                     self._coordinator.send_thermostat_setpoint(a.plugin_id, a.address, a.command)
+                elif a.type == "Device action" and a.control_type == "CONTROL_TYPE_DIMMER":
+                    self._coordinator.send_dimlevel(a.plugin_id, a.address, a.command)
 
     @inlineCallbacks            
     def _check_conditions(self, eventid):

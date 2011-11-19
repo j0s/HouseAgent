@@ -33,12 +33,33 @@ function thermostat_set(plugin, address, device_id)
     });
 
 }
+
+function dimmer_set(plugin, address, device_id)
+{
+    level = $('#dim' + device_id).val();
+    
+    var dataString = 'plugin=' + plugin + '&address=' + address + '&level=' + level
+    
+    $.ajax({
+        type: "POST",
+        url: "/control_dimmer",
+        data: dataString,
+        succes: function(data) {
+            $('#status' + device_id).html(temp);
+        }
+    });
+
+}
     
 $(document).ready(function() 
 {
     $('.spin').spin({
         imageBasePath: '/images/',
         interval: 0.1
+    });
+    $('.dimspin').spin({
+        imageBasePath: '/images/',
+        interval: 1
     });
 
 });
@@ -83,7 +104,9 @@ $(document).ready(function()
 								</button>
 							% elif device[6] == "CONTROL_TYPE_THERMOSTAT":
 								<input value='${device[4]}' id='stat${device[5]}' size=1 type="input" class="spin" value="22" /> <button onclick='javascript:thermostat_set("${device[3]}", "${device[1]}", "${device[5]}");' class="ui-button ui-button-text-only ui-widget ui-state-default ui-corner-all"><span class="ui-button-text">Set</span></button>
-							% endif					
+							% elif device[6] == "CONTROL_TYPE_DIMMER":
+								<input value='${device[4]}' id='dim${device[5]}' size=1 type="input" class="dimspin" value="0" /> <button onclick='javascript:dimmer_set("${device[3]}", "${device[1]}", "${device[5]}");' class="ui-button ui-button-text-only ui-widget ui-state-default ui-corner-all"><span class="ui-button-text">Dim</span></button>
+							% endif
 							</td>
 						</tr>
 						% endfor

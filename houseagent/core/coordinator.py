@@ -244,6 +244,21 @@ class Coordinator(object):
         
         return self.send_command(plugin_id, content)
         
+    def send_dimlevel(self, plugin_id, address, level):
+        '''
+        Send power off request to device.
+        @param plugin_id: the id of the plugin
+        @param address: the address of the device
+        @param level: the dimmer level
+        
+        @return: a Twisted deferred which will callback with the result
+        '''
+        content = {'address': address,
+                   'type': 'dim',
+                   'level': level}
+        
+        return self.send_command(plugin_id, content)
+        
     def send_thermostat_setpoint(self, plugin_id, address, temperature):
         '''
         Send thermostat setpoint request to specified device.
